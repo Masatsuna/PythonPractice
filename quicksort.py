@@ -1,34 +1,49 @@
-#スタック使う？
 num = [5, 8, 6, 2, 1, 9, 7, 4, 3]
-numlist = list()
-p = int(len(num) / 2)
-x = 0
-y = len(num)
+numList = [[0, len(num) - 1]]	#分けたリストの位置のスタック
 
-def left(min):
-	for i in range(min, len(num)):
-		if num[i] >= num[p]:
+def left(pivot, lpos, maxN):
+	for i in range(lpos, maxN + 1):
+		if num[i] >= pivot:
 			return i
-			break
-			
-def right(max):
-	for i in range(0, max)[::-1]:
-		if num[i] <= num[p]:
+
+	return -1
+
+def right(pivot, minN, rpos):
+	for i in range(minN, rpos + 1)[::-1]:
+		if num[i] <= pivot:
 			return i
+
+	return -1
+def change():
+	global num, numList
+	rang = numList[-1]
+	lpos = rang[0]
+	rpos = rang[1]
+	ppos = int((rang[0] + rang[1]) / 2)
+	pivot = num[ppos]
+	if(rang[0] == ppos and rang[0] < rang[1]):
+		numList.pop()
+		return
+	while 1:
+		lpos = left(pivot, lpos, rang[1])
+		rpos = right(pivot, rang[0], rpos)
+		if lpos < rpos:
+			num[lpos], num[rpos] = num[rpos], num[lpos]
+			print(num)
+			lpos += 1
+			rpos -= 1
+		else:
+			numList.pop()
+			if(rang[1] - lpos > 0):
+				numList.append([lpos, rang[1]])
+			if((lpos - 1) - rang[0] > 0):
+				numList.append([rang[0], lpos - 1])
+
 			break
 
-def change(n):			
-	while():			
-		lnum = left(x)
-		rnum = right(y)
-		if lnum < rnum:
-			n[x], n[y] = n[y], n[x]
-		else if lnum > rnum:
-			
-		else if lnum == rnum:
-			
-	
-	numlist.append(n[0:x-1])
-	numlist.append(n[x: len(num)])
 
-change(num)
+while len(numList) != 0:
+	change()
+	#print(num)
+
+print(num)
